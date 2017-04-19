@@ -38,6 +38,18 @@
 		<!--COMMENT:	All process launched will be included, except for what matches a rule below. It's best to be as specific as possible, to
 				avoid user-mode executables imitating other process names to avoid logging, or if malware drops files in an existing directory.
 				Ultimately, you must weigh CPU time checking many detailed rules, against the risk of malware exploiting the blindness created.-->
+			<!--SECTION: Microsoft CUSTOM-->
+			<ParentImage condition="is">C:\Program Files\SMS_CCM\CcmExec.exe</ParentImage> <!-- Microsoft:SCCM CUSTOM -->
+			<ParentCommandLine condition="is">C:\Windows\CCM\CcmExec.exe</ParentCommandLine> <!-- Microsoft: SCCM CUSTOM -->
+			<Image condition="is">C:\Windows\System32\VSSVC.exe</Image> <!-- Microsoft:Windows: Volume Shadow Service CUSTOM -->
+			<Image condition="is">C:\Program Files\Microsoft Security Client\msseces.exe</Image> <!-- Microsoft: Client Security CUSTOM -->
+			<Image condition="is">C:\Program Files\Microsoft Office\Office15\msoia.exe</Image> <!-- Microsoft: Office telemetry agent CUSTOM -->
+			<ParentImage condition="is">C:\Program Files (x86)\Jenzamate\JenzaMate.exe</ParentImage> <!-- JenzaMate CUSTOM -->
+			<Image condition="is">C:\Program Files (x86)\CX\putty.exe</Image> <!-- PuTTY CUSTOM -->
+			<Image condition="is">C:\Windows\System32\scrnsave.scr</Image> <!-- Screen saver CUSTOM -->
+			<Image condition="end with">:\Windows\System32\LogonUI.exe</Image> <!-- Logon GINA CUSTOM -->
+			<ParentImage condition="begin with">C:\Program Files (x86)\Microsoft Office\Office</ParentImage> <!-- Microsoft: Office CUSTOM -->
+			<Image condition="begin with">C:\Program Files (x86)\Microsoft Office\Office</Image> <!-- Microsoft: Office CUSTOM -->
 			<!--SECTION: Microsoft Windows-->
 			<IntegrityLevel condition="is">AppContainer</IntegrityLevel> <!--Microsoft:Windows: Don't care about sandboxed processes-->
 			<CommandLine condition="begin with">C:\Windows\system32\DllHost.exe /Processid</CommandLine> <!--Microsoft:Windows-->
@@ -211,6 +223,8 @@
 			<Image condition="is">C:\Program Files\Synaptics\SynTP\SynTPEnh.exe</Image>
 			<Image condition="is">C:\Program Files\Synaptics\SynTP\SynTPEnhService.exe</Image>
 			<!--SECTION: Custom Apps-->
+			<ParentCommandLine condition="is">"C:\Program Files (x86)\RdpGuard\rdpguard-svc.exe"</ParentCommandLine> <!-- RDP Guard CUSTOM -->
+			<Image condition="is">C:\Program Files\VMware\VMware Tools\vmtoolsd.exe</Image> <!-- VMware VMtools daemon CUSTOM -->
 			<!--SECTION: Labtech -->
 			<!--Since Labtech nests its processes, the following exclusions could be exploited, remove if you do not need-->
 			<!--TODO: Will define these more in the future-->
@@ -291,6 +305,11 @@
 			<Image condition="image">chrome.exe</Image> <!--Chrome constantly changes file times-->
 			<Image condition="image">C:\WINDOWS\system32\backgroundTaskHost.exe</Image> <!--Chrome constantly changes file times-->
 			<Image condition="contains">setup</Image> <!--Ignore setups-->
+			<Image condition="is">C:\Program Files\SMS_CCM\CcmExec.exe</Image> <!-- Microsoft: SCCM CUSTOM -->
+			<Image condition="contains">\Microsoft SQL Server\MSRS11.MSSQLSERVER\Reporting Services\ReportServer\bin\ReportingServicesService.exe</Image> <!-- Microsoft: SSRS CUSTOM -->
+			<Image condition="image">MsMpEng.exe</Image> <!-- Microsoft: Antimalware engine CUSTOM -->
+			<TargetFilename condition="contains">C:\Program Files\Update Services\LogFiles\WSUSTemp</TargetFilename> <!-- Microsoft: WSUS CUSTOM -->
+			<TargetFilename condition="contains"> C:\Windows\System32\LogFiles\Scm\</TargetFilename> <!-- Microsoft: SCM Logging CUSTOM -->
 		</FileCreateTime>
 
 	<!--SYSMON EVENT ID 3 : NETWORK CONNECTION INITIATED-->
@@ -516,6 +535,7 @@
 			<SourcePort condition="is">50646</SourcePort> <!--Windows: WS-Discovery noise-->
 			<Image condition="is">C:\Program Files (x86)\SmartGit\jre\bin\java.exe</Image>
 			<Image condition="is">C:\Program Files (x86)\SyncedTool\bin\autoupdate.exe</Image>
+			
 			<Image condition="end with">penv\Scripts\python.exe</Image> <!-- eFolder Anchor Server -->
 			<DestinationHostname condition="begin with">efolder01</DestinationHostname> <!-- eFolder Noise -->
 			<DestinationPort condition="is">2080</DestinationPort><!--eFolder Noise -->
@@ -525,6 +545,20 @@
 			<Image condition="is">C:\Program Files (x86)\Webroot\WRSA.exe</Image>
 			<Image condition="begin with">C:\Program Files (x86)\SmartGit\</Image>
 			<Image condition="end with">DSPro\Programs\pr001Celery98.exe</Image>
+			<!-- Custom Entries -->
+			<DestinationPortName condition="is">bootps</DestinationPortName> <!--DHCP-->
+			<DestinationPortName condition="is">epmap</DestinationPortName> <!--RDP endpoint mapper (and DCOM)-->
+			<SourcePortName condition="is">epmap</SourcePortName> <!--RDP endpoint mapper (and DCOM)-->
+			<SourcePortName condition="is">dhcpv6-client</SourcePortName> <!--dhcp client-->
+			<SourcePortName condition="is">dhcpv6-server</SourcePortName> <!--dhcp server-->
+			<DestinationPortName condition="is">domain</DestinationPortName> <!--DNS-->
+			<DestinationHostname condition="is">ems-nie8500</DestinationHostname> <!--Johnson controls-->
+			<SourcePort condition="is">5040</SourcePort> <!-- Microsoft: WDS RPC -->
+			<DestinationHostname condition="is">msdc-2.letnet.net</DestinationHostname> <!-- Domain Controller CUSTOM -->
+			<DestinationHostname condition="is">msdc-1.letnet.net</DestinationHostname> <!-- Domain Controller CUSTOM -->
+			<DestinationHostname condition="is">msdc-3.letnet.net</DestinationHostname> <!-- Domain Controller CUSTOM -->
+			<DestinationHostname condition="is">sccm2012.letnet.net</DestinationHostname> <!-- SCCM CUSTOM -->
+			<DestinationHostname condition="is">backup-2.letnet.net</DestinationHostname> <!-- backup server -->
 		</NetworkConnect>
 
 	<!--SYSMON EVENT ID 4 : RESERVED FOR SYSMON STATUS MESSAGES, THIS LINE IS INCLUDED FOR DOCUMENTATION PURPOSES ONLY-->
@@ -626,6 +660,20 @@
 			<ImageLoaded condition="contains">C:\Program Files (x86)\Notepad++</ImageLoaded> <!--Notepad++ Plugins Are unsigned-->
 			<Image condition="is">C:\Program Files (x86)\SyncedTool\bin\autoupdate.exe</Image> <!-- eFolder SyncedTool -->
 			<Image condition="is">C:\PostgreSQL9.1\bin\postgres.exe</Image> <!-- eFolder Server loading unsigned dll's -->
+			<Image condition="is">C:\Windows\System32\wbem\WmiPrvSE.exe</Image> <!-- Microsoft: SMS/WMI CUSTOM -->
+			<ImageLoaded condition="is">C:\Program Files\Bonjour\mdnsNSP.dll</ImageLoaded> <!-- Apple: Bonjour CUSTOM -->
+			<ImageLoaded condition="contains">mscss7cm_en.dub</ImageLoaded> <!-- Microsoft: Office CUSTOM -->
+			<ImageLoaded condition="contains">mscss7wre_en.dub</ImageLoaded> <!-- Microsoft: Office CUSTOM -->
+			<ImageLoaded condition="contains">PROOF\MSSP7EN.LEX</ImageLoaded> <!-- Microsoft: Office CUSTOM -->
+			<ImageLoaded condition="is">C:\Program Files (x86)\IBM\Informix\Client-SDK\bin\igo4n304.dll</ImageLoaded> <!-- IBM Informix Driver CUSTOM -->
+			<Image condition="is">C:\Program Files\VMware\VMware Tools\vmtoolsd.exe</Image> <!-- VMware VMtools daemon CUSTOM -->
+			<ImageLoaded condition="contains">VMware\VMware Tools\sigc-2.0.dll</ImageLoaded> <!-- VMware VMtools daemon CUSTOM -->
+			<Image condition="contains">\Jenzamate\JenzaMate.exe</Image> <!-- JenzaMate CUSTOM -->
+			<Image condition="contains">\Jenzamate\jre\bin\javaw.exe</Image> <!-- JenzaMate CUSTOM -->
+			<ImageLoaded condition="begin with">C:\Program Files (x86)\IBM\Informix\Client-SDK\</ImageLoaded> <!-- IBM Informix CUSTOM -->
+			<Image condition="begin with">C:\Program Files (x86)\Jenzabar JenzaMate\</Image> <!-- JenzaMate CUSTOM -->
+			<Image condition="end with">:\Windows\System32\LogonUI.exe</Image> <!-- Microsoft: Logon GINA CUSTOM -->
+			<ImageLoaded condition="end with">:\Windows\System32\cryptdll.dll</ImageLoaded> <!-- Microsoft: Cryptography Manager CUSTOM -->
 		</ImageLoad>
 	<!--SYSMON EVENT ID 8 : REMOTE THREAD CREATED-->
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceImage, TargetProcessId, TargetImage, NewThreadId, StartAddress, StartModule, StartFunction-->
@@ -642,6 +690,9 @@
 			<StartModule condition="is">C:\windows\system32\kernel32.dll</StartModule>
 			<TargetImage condition="end with">Google\Chrome\Application\chrome.exe</TargetImage>
 			<SourceImage condition="contains">FireSvc.exe</SourceImage>
+			<SourceImage condition="is">C:\Windows\System32\rdpclip.exe</SourceImage> <!-- RDS rdclip CUSTOM -->
+			<TargetImage condition="is">C:\Windows\CCM\SCNotification.exe</TargetImage> <!-- Microsoft: CCM CUSTOM -->
+			<SourceImage condition="is">C:\Windows\SysWOW64\wbem\WmiPrvSE.exe</SourceImage> <!-- Microsoft: Wmi CUSTOM -->
 		</CreateRemoteThread>
 
 	<!--SYSMON EVENT ID 9 : RAW DISK ACCESS-->
@@ -821,6 +872,19 @@
 			<TargetFilename condition="end with">.SQM</TargetFilename> <!-- Ignore Exchange files created -->
 			<TargetFilename condition="end with">.SPL</TargetFilename> <!-- Ignore Spooled Print Jobs -->
 			<TargetFilename condition="end with">.SHD</TargetFilename> <!-- Ignore Spooled Print Jobs -->
+			<Image condition="is">C:\Windows\system32\wbem\wmiprvse.exe</Image> <!-- Microsoft: SMS/WMI CUSTOM -->
+			<TargetFilename condition="contains">:\Windows\System32\LogFiles\Scm\</TargetFilename> <!-- Microsoft: SCM Logging CUSTOM -->
+			<Image condition="is">C:\Program Files\Microsoft Configuration Manager\bin\x64\smsexec.exe</Image> <!-- Microsoft: SCCM CUSTOM -->
+			<TargetFilename condition="contains">Sources\wsus\WsusContent</TargetFilename> <!-- Microsoft: WSUS CUSTOM --> 
+			<TargetFilename condition="contains">:\Windows\System32\spool\PRINTERS\</TargetFilename> <!-- Microsoft: Print spooler CUSTOM -->
+			<TargetFilename condition="contains">:\Windows\System32\spool\V4Dirs\</TargetFilename> <!-- Microsoft: Print spooler CUSTOM -->
+			<Image condition="is">\Windows\System32\config\systemprofile\AppData\Roaming\Microsoft\SystemCertificates\Request\Certificates</Image>
+			<TargetFilename condition="end with">WRITABLE.TST</TargetFilename> <!-- Microsoft:Windows: Created in wbem by svchost -->
+			<TargetFilename condition="begin with">C:\Windows\System32\wbem\Performance\</TargetFilename> <!-- Microsoft:Windows: Created in wbem by WMIADAP.exe -->
+			<TargetFilename condition="begin with">C:\Windows\System32\DriverStore\Temp\</TargetFilename> <!-- Microsoft:Windows: Temp files by DrvInst.exe-->
+			<TargetFilename condition="begin with">C:\Windows\System32\wbem\Performance\</TargetFilename> <!-- Microsoft:Windows: Created in wbem by WMIADAP.exe-->
+			<TargetFilename condition="end with">WRITABLE.TST</TargetFilename> <!-- Microsoft:Windows: Created in wbem by svchost-->
+			<Image condition="is">C:\Windows\system32\sppsvc.exe</Image> <!-- Microsoft: stuff CUSTOM -->
 			<!--SECTION: Microsoft:Windows:Updates-->
 			<TargetFilename condition="begin with">C:\$WINDOWS.~BT\Sources\SafeOS\SafeOS.Mount\</TargetFilename> <!-- Microsoft:Windows: Feature updates containing lots of .exe and .sys-->
 			<TargetFilename condition="end with">.etl</TargetFilename> <!-- Microsoft:Windows: Logs and Trace files -->
@@ -1080,6 +1144,21 @@
 			<Image condition="is">C:\Windows\SystemApps\Microsoft.Windows.Cortana_cw5n1h2txyewy\SearchUI.exe</Image>
 			<Image condition="is">C:\Program Files\Windows Defender\MsMpEng.exe</Image>
 			<TargetObject condition="contains">Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\ExtensionsStore\</TargetObject> <!-- Edge Extensions Creating Reg entries on launch -->
+			<Image condition="is">C:\Program Files\Microsoft Configuration Manager\bin\x64\smsexec.exe</Image> <!-- Microsoft: SCCM service CUSTOM -->
+			<TargetObject condition="begin with">HKLM\SOFTWARE\Microsoft\SMS\Identification\</TargetObject> <!-- Microsoft: SCCM/SMS CUSTOM -->
+			<Image condition="is">C:\Windows\CCM\UpdateTrustedSites.exe</Image> <!-- Microsoft: ZoneMap CUSTOM -->
+			<TargetObject condition="begin with">HKLM\System\CurrentControlSet\Control\CLASS\{4D36E972-E325-11CE-BFC1-08002BE10318}\</TargetObject> <!-- Network Adapter changes CUSTOM -->
+			<TargetObject condition="is">HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\InProgress\(Default)</TargetObject> <!-- Win Installers CUSTOM -->
+			<TargetObject condition="begin with">HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\</TargetObject> <!-- Microsoft: Task Scheduler CUSTOM -->
+			<Image condition="end with">:\Windows\System32\spoolsv.exe</Image> <!-- Microsoft: Print Spooler CUSTOM -->
+			<Image condition="end with">:\Program Files (x86)\Common Files\Adobe\ARM\1.0\AdobeARM.exe</Image> <!-- Adobe: Crap CUSTOM -->
+			<TargetObject condition="begin with">HKLM\System\CurrentControlSet\Enum\SWD\PRINTENUM\</TargetObject> <!-- Microsoft: RDS Printer redirection CUSTOM -->
+			<TargetObject condition="begin with">HKLM\System\CurrentControlSet\Control\DeviceClasses\</TargetObject> <!-- Microsoft: RDS Printer redirection CUSTOM -->
+			<Image condition="end with">:\Program Files (x86)\Microsoft SQL Server\130\Tools\Binn\ManagementStudio\Ssms.exe</Image> <!-- Microsoft: SSRS CUSTOM -->
+			<Image condition="begin with">C:\Program Files (x86)\Microsoft Office\Office</Image> <!-- Microsoft: Office CUSTOM -->
+			<Image condition="is">C:\Windows\system32\wbem\wmiprvse.exe</Image> <!-- Microsoft: Wmi CUSTOM -->
+			<Image condition="is">C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\AcroRd32.exe</Image> <!-- Adobe: crap CUSTOM -->
+			<Image condition="is">C:\Windows\System32\RuntimeBroker.exe</Image> <!-- Microsoft: Runtime Broker CUSTOM -->
 			<!--Misc-->
 			<TargetObject condition="begin with">HKLM\SOFTWARE\MICROSOFT\WINDOWS NT\CURRENTVERSION\Schedule\TaskCache\Tree\Optimize Start Menu Cache Files-</TargetObject>
 			<TargetObject condition="begin with">HKLM\SOFTWARE\MICROSOFT\WINDOWS NT\CURRENTVERSION\Schedule\TaskCache\Tree\User_Feed_Synchronization-</TargetObject>
@@ -1238,6 +1317,27 @@
 			<!--SECTION: Microsoft-->
 			<PipeName condition="contains">lsass</PipeName>
 			<PipeName condition="is">\SQLLocal\RTCLOCAL</PipeName>
+			<Image condition="is">C:\Program Files\Microsoft Configuration Manager\bin\x64\smsexec.exe</Image> <!-- SCCM/SMS agent CUSTOM -->
+			<Image condition="is">C:\Program Files\Microsoft Configuration Manager\bin\x64\cmupdate.exe</Image> <!-- SCCM/SMS update agent CUSTOM -->
+			<Image condition="is">c:\windows\system32\inetsrv\w3wp.exe</Image> <!-- IIS/WDS Imaging CUSTOM -->
+			<Image condition="is">C:\Windows\System32\inetsrv\w3wp.exe</Image> <!-- IIS/WDS Imaging CUSTOM -->
+			<PipeName condition="is">\SQLLocal\MSSQLSERVER</PipeName> <!-- SQL Server CUSTOM -->
+			<PipeName condition="is">\SQLLocal\ADK</PipeName> <!-- SQL Server CUSTOM -->
+			<Image condition="is">C:\Windows\system32\wbem\wmiprvse.exe</Image> <!-- SMS/WMI CUSTOM -->
+			<Image condition="end with">slack.exe</Image>
+			<Image condition="is">C:\Program Files\Symantec\Backup Exec\RAWS\beremote.exe</Image> <!-- Backup Exec CUSTOM -->
+			<Image condition="is">C:\Program Files (x86)\RdpGuard\rdpguard-svc.exe</Image> <!-- RDP Guard CUSTOM -->
+			<PipeName condition="contains">\com.Yammer.YammerDesktop</PipeName> <!-- Microsoft: Yammer CUSTOM -->
+			<PipeName condition="is">\winreg</PipeName> <!-- CUSTOM -->
+			<Image condition="end with">:\Windows\System32\tssdis.exe</Image> <!-- Microsoft: Terminal Services Session Broker Service CUSTOM -->
+			<PipeName condition="is">\HydraLsPipe</PipeName> <!-- Microsoft: Terminal Services Licensing Server CUSTOM -->
+			<PipeName condition="is">\MICROSOFT##WID\tsql\query</PipeName> <!-- Microsoft: Server internal database CUSTOM -->
+			<Image condition="end with">:\Program Files (x86)\Common Files\Adobe\ARM\1.0\AdobeARM.exe</Image> <!-- Adobe: Crap CUSTOM -->
+			<PipeName condition="begin with">\AIPC_SRV\AcroSBL</PipeName> <!-- Adobe: more of their crap CUSTOM -->
+			<PipeName condition="begin with">\ACROCOMM\ACTWIN</PipeName> <!-- Adobe: more of their crap CUSTOM -->
+			<Image condition="begin with">C:\Program Files (x86)\Microsoft Office\Office</Image> <!-- Microsoft: Office CUSTOM -->
+			<Image condition="begin with">C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader</Image> <!-- Adobe: crap CUSTOM -->
+			<Image condition="is">C:\Windows\System32\svchost.exe</Image> <!-- Microsoft: svchost CUSTOM -->
 			<!--SECTION: Microsoft IIS -->
 			<PipeName condition="begin with">\M.E.C.Core.WinRMDataCommunicator.NamedPipe.</PipeName>
 			<Image condition="is">c:\windows\system32\inetsrv\w3wp.exe</Image>
