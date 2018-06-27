@@ -4,7 +4,7 @@
   Master author:	@SwiftOnSecurity, other contributors also credited in-line or on Git
   Master project:	https://github.com/SwiftOnSecurity/sysmon-config
   Master license:	Creative Commons Attribution 4.0 | You may privatize, fork, edit, teach, publish, or deploy for commercial use - with attribution in the text.
-  Fork version:	101, 2018-05-02
+  Fork version:	101, 2018-06-27
   Fork author:	ionstorm, contributions by mdavis332
   Fork project:	https://github.com/ion-storm/sysmon-config
   REQUIRED: Sysmon version 7.01 or higher (due to changes in registry syntax and bug-fixes)
@@ -713,9 +713,15 @@
 			<DestinationPortName condition="is">domain</DestinationPortName> <!--DNS-->
 			<DestinationHostname condition="is">ems-nie8500</DestinationHostname> <!--Johnson controls-->
 			<SourcePort condition="is">5040</SourcePort> <!-- Microsoft: WDS RPC -->
-			<DestinationHostname condition="starts with">msdc</DestinationHostname> <!-- Domain Controller CUSTOM -->
-			<DestinationHostname condition="starts with">sccm</DestinationHostname> <!-- SCCM CUSTOM -->
-			<DestinationHostname condition="starts with">backup</DestinationHostname> <!-- backup server CUSTOM -->
+			<DestinationHostname condition="begin with">msdc</DestinationHostname> <!-- Domain Controller CUSTOM -->
+			<DestinationHostname condition="begin with">sccm</DestinationHostname> <!-- SCCM CUSTOM -->
+			<DestinationHostname condition="begin with">backup</DestinationHostname> <!-- backup server CUSTOM -->
+			<Image condition="end with">AlertusDesktopAlert.exe</Image> <!-- Alertus -->
+			<Image condition="end with">lync.exe</Image> <!-- Skype for Business -->
+			<Image condition="end with">OUTLOOK.exe</Image> <!-- Microsoft Outlook -->
+			<Image condition="end with">WINWORD.exe</Image> <!-- Microsoft Word -->
+			<Image condition="end with">UcMapi.exe</Image> <!-- Microsoft Gobble-dee-gook -->
+			<Image condition="is">C:\Program Files (x86)\Jenzabar JenzaMate\jre\bin\javaw.exe</Image> <!-- Jenzabar JenzaMate -->
 		</NetworkConnect>
 
 	<!--SYSMON EVENT ID 4 : RESERVED FOR SYSMON STATUS MESSAGES-->
