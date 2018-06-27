@@ -15,10 +15,10 @@ set tasktime=%hour%:%minute%
 mkdir C:\ProgramData\sysmon
 pushd "C:\ProgramData\sysmon\"
 echo [+] Downloading Sysmon...
-@powershell (new-object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Sysmon64.exe','C:\ProgramData\sysmon\sysmon64.exe')"
+@powershell "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;(new-object System.Net.WebClient).DownloadFile('https://live.sysinternals.com/Sysmon64.exe','C:\ProgramData\sysmon\sysmon64.exe')"
 echo [+] Downloading Sysmon config...
-@powershell (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/mdavis332/sysmon-config/master/sysmonconfig-export.xml','C:\ProgramData\sysmon\sysmonconfig-export.xml')"
-@powershell (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/mdavis332/sysmon-config/master/Auto_Update.bat','C:\ProgramData\sysmon\Auto_Update.bat')"
+@powershell "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;(new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/mdavis332/sysmon-config/master/sysmonconfig-export.xml','C:\ProgramData\sysmon\sysmonconfig-export.xml')"
+@powershell "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;(new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/mdavis332/sysmon-config/master/Auto_Update.bat','C:\ProgramData\sysmon\Auto_Update.bat')"
 sysmon64.exe -accepteula -i sysmonconfig-export.xml
 sc failure Sysmon actions= restart/10000/restart/10000// reset= 120
 echo [+] Sysmon Successfully Installed!
